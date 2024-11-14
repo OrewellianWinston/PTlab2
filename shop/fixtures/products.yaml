@@ -1,15 +1,50 @@
 - model: shop.product
   pk: 1
   fields:
-    name: Стол
-    price: 2000
+    name: Диван-кровать угловой
+    price: 45790
 - model: shop.product
   pk: 2
   fields:
-    name: Стул
-    price: 1000
+    name: Детский диван выкатной
+    price: 20090
 - model: shop.product
   pk: 3
   fields:
-    name: Табурет
-    price: 500
+    name: Кресло-реклайнер
+    price: 27990
+- model: shop.product
+  pk: 4
+  fields:
+    name: Компактный пуф
+    price: 3290
+- model: shop.product
+  pk: 5
+  fields:
+    name: Диван-еврокнижка
+    price: 37500
+- model: shop.product
+  pk: 6
+  fields:
+    name: Диван-кровать с подлокотниками
+    price: 48990
+- model: shop.product
+  pk: 7
+  fields:
+    name: Кресло-качалка деревянная
+    price: 15490
+- model: shop.product
+  pk: 8
+  fields:
+    name: Пуф с ящиком для хранения
+    price: 5490
+- model: shop.product
+  pk: 9
+  fields:
+    name: Угловой диван с полкой
+    price: 51290
+- model: shop.product
+  pk: 10
+  fields:
+    name: Кресло-кровать
+    price: 22990

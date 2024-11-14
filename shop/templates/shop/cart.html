@@ -1,0 +1,17 @@
+<h1>Корзина</h1>
+<ul>
+    {% for item in cart_items %}
+        <li>
+            {{ item.name }} - {{ item.quantity }} x {{ item.price }} ₽
+            <a href="{% url 'remove_from_cart' item.product_id %}">Удалить</a>
+        </li>
+    {% endfor %}
+</ul>
+<p>Общая стоимость: {{ total_price }} ₽</p>
+
+<form method="post" action="{% url 'clear_cart' %}">
+    {% csrf_token %}
+    <button type="submit">Удалить все</button>
+</form>
+
+<a href="{% url 'index' %}">Вернуться к покупкам</a>
