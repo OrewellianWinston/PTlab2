@@ -1,0 +1,1 @@
+web: gunicorn tplab2.wsgi
