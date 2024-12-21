@@ -1,10 +1,23 @@
-<h1>Оформление покупки</h1>
-<p>Вы покупаете: {{ product.name }} - {{ product.price }} ₽</p>
-<form method="post">
+{% extends 'shop/base.html' %}
+
+{% block content %}
+  <h1>Оформление покупки</h1>
+  {% if cart_items %}
+  <p>Товары в корзине:</p>
+  <ul>
+    {% for item in cart_items %}
+      <li>{{ item.name }} x {{ item.quantity }} - {{ item.price }} ₽</li>
+    {% endfor %}
+  </ul>
+  <p>Общая стоимость: {{ total_price }} ₽</p>
+
+  <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Купить</button>
-    
-</form>
-<a href="{% url 'index' %}">Вернуться к покупкам</a>
-
+  </form>
+  {% else %}
+  <p>Корзина пуста.</p>
+  {% endif %}
+  <a href="{% url 'index' %}">Вернуться к покупкам</a>
+{% endblock %}

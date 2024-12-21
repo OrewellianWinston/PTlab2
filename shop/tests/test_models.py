@@ -1,38 +1,35 @@
 from django.test import TestCase
-from shop.models import Product, Purchase
-from datetime import datetime
+from shop.models import Product, Purchase, Cart
+from django.contrib.auth.models import User
 
-class ProductTestCase(TestCase):
+class ProductModelTest(TestCase):
+    def test_product_creation(self):
+        product = Product.objects.create(name="Test Product", price=100)
+        self.assertEqual(product.name, "Test Product")
+        self.assertEqual(product.price, 100)
+        self.assertEqual(str(product), "Test Product")
+
+class PurchaseModelTest(TestCase):
     def setUp(self):
-        Product.objects.create(name="book", price="740")
-        Product.objects.create(name="pencil", price="50")
+        self.product = Product.objects.create(name="Test Product", price=100)
+    def test_purchase_creation(self):
+        purchase = Purchase.objects.create(product=self.product, person="testuser", address="Test Address")
+        self.assertEqual(purchase.product, self.product)
+        self.assertEqual(purchase.person, "testuser")
+        self.assertEqual(purchase.address, "Test Address")
+        self.assertIsNotNone(purchase.date)
+        self.assertEqual(str(purchase), "Test Product purchased by testuser")
 
-    def test_correctness_types(self):                   
-        self.assertIsInstance(Product.objects.get(name="book").name, str)
-        self.assertIsInstance(Product.objects.get(name="book").price, int)
-        self.assertIsInstance(Product.objects.get(name="pencil").name, str)
-        self.assertIsInstance(Product.objects.get(name="pencil").price, int)        
-
-    def test_correctness_data(self):
-        self.assertTrue(Product.objects.get(name="book").price == 740)
-        self.assertTrue(Product.objects.get(name="pencil").price == 50)
-
-
-class PurchaseTestCase(TestCase):
+class CartModelTest(TestCase):
     def setUp(self):
-        self.product_book = Product.objects.create(name="book", price="740")
-        self.datetime = datetime.now()
-        Purchase.objects.create(product=self.product_book,
-                                person="Ivanov",
-                                address="Svetlaya St.")
-
-    def test_correctness_types(self):
-        self.assertIsInstance(Purchase.objects.get(product=self.product_book).person, str)
-        self.assertIsInstance(Purchase.objects.get(product=self.product_book).address, str)
-        self.assertIsInstance(Purchase.objects.get(product=self.product_book).date, datetime)
-
-    def test_correctness_data(self):
-        self.assertTrue(Purchase.objects.get(product=self.product_book).person == "Ivanov")
-        self.assertTrue(Purchase.objects.get(product=self.product_book).address == "Svetlaya St.")
-        self.assertTrue(Purchase.objects.get(product=self.product_book).date.replace(microsecond=0) == \
-            self.datetime.replace(microsecond=0))
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.product = Product.objects.create(name="Test Product", price=100)
+    def test_cart_item_creation(self):
+        cart_item = Cart.objects.create(user=self.user, product=self.product, quantity=2)
+        self.assertEqual(cart_item.user, self.user)
+        self.assertEqual(cart_item.product, self.product)
+        self.assertEqual(cart_item.quantity, 2)
+        self.assertEqual(str(cart_item), "Test Product x 2")
+    def test_cart_item_total_price(self):
+        cart_item = Cart.objects.create(user=self.user, product=self.product, quantity=3)
+        self.assertEqual(cart_item.total_price, 300)
