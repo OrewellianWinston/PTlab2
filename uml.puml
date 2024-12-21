@@ -1,0 +1,98 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+' === Models ===
+class Product {
+  -name: CharField
+  -price: PositiveIntegerField
+  --
+  +__str__(): str
+}
+
+class Purchase {
+  -product: ForeignKey
+  -person: CharField
+  -address: CharField
+  -date: DateTimeField
+  --
+  +__str__(): str
+}
+
+class Cart {
+    -user: ForeignKey
+    -product: ForeignKey
+    -quantity: PositiveIntegerField
+    --
+    +__str__(): str
+    +total_price: property
+}
+
+' === Views ===
+abstract class View
+class TemplateView extends View
+class CreateView extends TemplateView
+class ListView extends TemplateView
+class View
+class View
+class IndexView {
+  +index(request): HttpResponse
+}
+
+class PurchaseCreate extends CreateView {
+    -model: Purchase
+    -fields: list
+    -template_name: str
+    --
+    +dispatch(*args, **kwargs): HttpResponse
+    +get_context_data(**kwargs): dict
+    +form_valid(form): HttpResponse
+}
+
+class CartView {
+    +view_cart(request): HttpResponse
+}
+
+class AddToCartView {
+  +add_to_cart(request, product_id): HttpResponse
+}
+
+class RemoveFromCartView {
+  +remove_from_cart(request, product_id): HttpResponse
+}
+
+class ClearCartView {
+    +clear_cart(request): HttpResponse
+}
+
+class RegistrationView {
+     +register(request): HttpResponse
+}
+
+class LoginView {
+     +login_user(request): HttpResponse
+}
+
+class LogoutView {
+     +logout_user(request): HttpResponse
+}
+
+class ProfileView {
+    +profile(request): HttpResponse
+}
+' === Relationships ===
+
+Purchase -- Product : "product"
+Cart -- Product : "product"
+Cart -- User : "user"
+PurchaseCreate -- Purchase : "model"
+
+IndexView -- Product : "uses"
+CartView -- Cart : "uses"
+AddToCartView -- Product : "uses"
+RemoveFromCartView -- Product : "uses"
+ClearCartView -- Cart: "uses"
+ProfileView -- Purchase : "uses"
+
+CreateView <|-- PurchaseCreate
+
+@enduml
